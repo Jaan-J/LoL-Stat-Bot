@@ -95,44 +95,52 @@ async function fetchRank(summonerID, queueType, returnData) {
     let rankData = await rankResponse.json();
 
     if (queueType === "solo") {
-        if (rankData[0] != undefined) {
-            if (returnData === "tier") {
-                return rankData[0].tier;
-            } else if (returnData === "rank") {
-                return rankData[0].rank;
-            } else if (returnData === "leaguePoints") {
-                return rankData[0].leaguePoints;
-            } else if (returnData === "wins") {
-                return rankData[0].wins;
-            } else if (returnData === "losses") {
-                return rankData[0].losses;
-            } else if (returnData === "winRatio") {
-                return rankData[0].wins / (rankData[0].wins + rankData[0].losses);
-            } else {
-                console.log("Error: No valid entry.");
+        for (i = 0; i < rankData.length; i++) {
+            if (rankData[i].queueType === "RANKED_SOLO_5x5") {
+                if (rankData[i].tier != "UNRANKED") {
+                    if (returnData === "tier") {
+                        return rankData[i].tier;
+                    } else if (returnData === "rank") {
+                        return rankData[i].rank;
+                    } else if (returnData === "leaguePoints") {
+                        return rankData[i].leaguePoints;
+                    } else if (returnData === "wins") {
+                        return rankData[i].wins;
+                    } else if (returnData === "losses") {
+                        return rankData[i].losses;
+                    } else if (returnData === "winRatio") {
+                        return rankData[i].wins / (rankData[i].wins + rankData[i].losses);
+                    } else {
+                        console.log("Error: No valid entry.");
+                    }
+                } else {
+                    return ("Unranked");
+                }
             }
-        } else {
-            return "Unranked";
         }
     } else if (queueType === "flex") {
-        if (rankData[1] != undefined) {
-            if (returnData === "tier") {
-                return rankData[1].tier;
-            } else if (returnData === "rank") {
-                return rankData[1].rank;
-            } else if (returnData === "leaguePoints") {
-                return rankData[1].leaguePoints;
-            } else if (returnData === "wins") {
-                return rankData[1].wins;
-            } else if (returnData === "losses") {
-                return rankData[1].losses;
-            } else if (returnData === "winRatio") {
-                return rankData[1].wins / (rankData[1].wins + rankData[1].losses);
-            } else {
-                console.log("Error: No valid entry.");
+        for (i = 0; i < rankData.length; i++) {
+            if (rankData[i].queueType === "RANKED_FLEX_SR") {
+                if (rankData[i].tier != "UNRANKED") {
+                    if (returnData === "tier") {
+                        return rankData[i].tier;
+                    } else if (returnData === "rank") {
+                        return rankData[i].rank;
+                    } else if (returnData === "leaguePoints") {
+                        return rankData[i].leaguePoints;
+                    } else if (returnData === "wins") {
+                        return rankData[i].wins;
+                    } else if (returnData === "losses") {
+                        return rankData[i].losses;
+                    } else if (returnData === "winRatio") {
+                        return rankData[i].wins / (rankData[i].wins + rankData[i].losses);
+                    } else {
+                        console.log("Error: No valid entry.");
+                    }
+                } else {
+                    return ("Unranked");
+                }
             }
-        } else {
-            return "Unranked";
         }
     }
 }
