@@ -254,6 +254,9 @@ bot.on('messageCreate', async (msg) => {
         if (soloqTier === "Unranked") {
             soloqRank = "";
             soloqLP = "";
+            soloqWins = "0";
+            soloqLosses = "0";
+            soloqWinRatio = "0.00";
         }
 
         // Create the embed to send to the channel.
