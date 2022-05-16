@@ -20,15 +20,16 @@ async function fetchSummoner(name, ch) {
     const playerResponse = await fetch(summonerInfoAPI);
     let playerData = await playerResponse.json();
 
-    if (ch == "profileIconId") {
-        return playerData.profileIconId;
-    } else if (ch == "summonerLevel") {
-        return playerData.summonerLevel;
-    } else if (ch == "summonerID") {
-        return playerData.id;
-    } else {
-        console.log("Error: No valid entry.");
-        return null;
+    switch
+    (ch) {
+        case "profileIconId":
+            return playerData.profileIconId;
+        case "summonerLevel":
+            return playerData.summonerLevel;
+        case "summonerID":
+            return playerData.id;
+        default:
+            return "Error";
     }
 }
 
@@ -50,41 +51,50 @@ async function fetchMasteryChamps(summonerID, mostPlayed, returnData) {
     if (mostPlayed === 0) {
         if (!masteryData[0].championId) {
             return null;
-        } else if (returnData === "championId") {
-            return masteryData[0].championId;
-        } else if (returnData === "championLevel") {
-            return masteryData[0].championLevel;
-        } else if (returnData === "championPoints") {
-            return masteryData[0].championPoints;
-        } else {
-            console.log("Error: No valid entry.");
-            return null;
+        }
+        switch
+        (returnData) {
+            case "championId":
+                return masteryData[0].championId;
+            case "championPoints":
+                return masteryData[0].championPoints;
+            case "championLevel":
+                return masteryData[0].championLevel;
+            default:
+                console.log("Error: No valid entry.");
+                return null;
         }
     } else if (mostPlayed === 1) {
         if (!masteryData[1].championId) {
             return null;
-        } else if (returnData === "championId") {
-            return masteryData[1].championId;
-        } else if (returnData === "championLevel") {
-            return masteryData[1].championLevel;
-        } else if (returnData === "championPoints") {
-            return masteryData[1].championPoints;
-        } else {
-            console.log("Error: No valid entry.");
-            return null;
+        }
+        switch
+        (returnData) {
+            case "championId":
+                return masteryData[1].championId;
+            case "championPoints":
+                return masteryData[1].championPoints;
+            case "championLevel":
+                return masteryData[1].championLevel;
+            default:
+                console.log("Error: No valid entry.");
+                return null;
         }
     } else if (mostPlayed === 2) {
         if (!masteryData[2].championId) {
             return null;
-        } else if (returnData === "championId") {
-            return masteryData[2].championId;
-        } else if (returnData === "championLevel") {
-            return masteryData[2].championLevel;
-        } else if (returnData === "championPoints") {
-            return masteryData[2].championPoints;
-        } else {
-            console.log("Error: No valid entry.");
-            return null;
+        }
+        switch
+        (returnData) {
+            case "championId":
+                return masteryData[2].championId;
+            case "championPoints":
+                return masteryData[2].championPoints;
+            case "championLevel":
+                return masteryData[2].championLevel;
+            default:
+                console.log("Error: No valid entry.");
+                return null;
         }
     }
 }
@@ -98,20 +108,23 @@ async function fetchRank(summonerID, queueType, returnData) {
     if (queueType === "solo") {
         for (i = 0; i < rankData.length; i++) {
             if (rankData[i].queueType === "RANKED_SOLO_5x5") {
-                if (returnData === "tier") {
-                    return rankData[i].tier;
-                } else if (returnData === "rank") {
-                    return rankData[i].rank;
-                } else if (returnData === "leaguePoints") {
-                    return rankData[i].leaguePoints;
-                } else if (returnData === "wins") {
-                    return rankData[i].wins;
-                } else if (returnData === "losses") {
-                    return rankData[i].losses;
-                } else if (returnData === "winRatio") {
-                    return rankData[i].wins / (rankData[i].wins + rankData[i].losses);
-                } else {
-                    console.log("Error: No valid entry.");
+                switch
+                (returnData) {
+                    case "tier":
+                        return rankData[i].tier;
+                    case "rank":
+                        return rankData[i].rank;
+                    case "leaguePoints":
+                        return rankData[i].leaguePoints;
+                    case "wins":
+                        return rankData[i].wins;
+                    case "losses":
+                        return rankData[i].losses;
+                    case "winRatio":
+                        return rankData[i].wins / (rankData[i].wins + rankData[i].losses);
+                    default:
+                        console.log("Error: No valid entry.");
+                        return null;
                 }
             }
         }
@@ -119,20 +132,23 @@ async function fetchRank(summonerID, queueType, returnData) {
     } else if (queueType === "flex") {
         for (i = 0; i < rankData.length; i++) {
             if (rankData[i].queueType === "RANKED_FLEX_SR") {
-                if (returnData === "tier") {
-                    return rankData[i].tier;
-                } else if (returnData === "rank") {
-                    return rankData[i].rank;
-                } else if (returnData === "leaguePoints") {
-                    return rankData[i].leaguePoints;
-                } else if (returnData === "wins") {
-                    return rankData[i].wins;
-                } else if (returnData === "losses") {
-                    return rankData[i].losses;
-                } else if (returnData === "winRatio") {
-                    return rankData[i].wins / (rankData[i].wins + rankData[i].losses);
-                } else {
-                    console.log("Error: No valid entry.");
+                switch
+                (returnData) {
+                    case "tier":
+                        return rankData[i].tier;
+                    case "rank":
+                        return rankData[i].rank;
+                    case "leaguePoints":
+                        return rankData[i].leaguePoints;
+                    case "wins":
+                        return rankData[i].wins;
+                    case "losses":
+                        return rankData[i].losses;
+                    case "winRatio":
+                        return rankData[i].wins / (rankData[i].wins + rankData[i].losses);
+                    default:
+                        console.log("Error: No valid entry.");
+                        return null;
                 }
             }
         }
@@ -142,42 +158,41 @@ async function fetchRank(summonerID, queueType, returnData) {
 
 // Fetches the Rank Icon of a player
 async function fetchRankIcon(tier) {
-    if (tier === "IRON") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/f/fe/Season_2022_-_Iron.png";
-    } else if (tier === "Bronze") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/e/e9/Season_2022_-_Bronze.png";
-    } else if (tier === "Silver") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/4/44/Season_2022_-_Silver.png";
-    } else if (tier === "Gold") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/8/8d/Season_2022_-_Gold.png";
-    } else if (tier === "Platinum") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/3/3b/Season_2022_-_Platinum.png";
-    } else if (tier === "Diamond") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/e/ee/Season_2022_-_Diamond.png";
-    } else if (tier === "Master") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/e/eb/Season_2022_-_Master.png";
-    } else if (tier === "Grandmaster") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/f/fc/Season_2022_-_Grandmaster.png";
-    } else if (tier === "Challenger") {
-        return "https://static.wikia.nocookie.net/leagueoflegends/images/0/02/Season_2022_-_Challenger.png";
-    } else {
-        return null;
+    switch (tier) {
+        case "Iron":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/f/fe/Season_2022_-_Iron.png";
+        case "Bronze":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/e/e9/Season_2022_-_Bronze.png";
+        case "Silver":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/4/44/Season_2022_-_Silver.png";
+        case "Gold":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/8/8d/Season_2022_-_Gold.png";
+        case "Platinum":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/3/3b/Season_2022_-_Platinum.png";
+        case "Diamond":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/e/ee/Season_2022_-_Diamond.png";
+        case "Master":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/e/eb/Season_2022_-_Master.png";
+        case "Grandmaster":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/f/fc/Season_2022_-_Grandmaster.png";
+        case "Challenger":
+            return "https://static.wikia.nocookie.net/leagueoflegends/images/0/02/Season_2022_-_Challenger.png";
+        default:
+            return null;
     }
 }
 
-
-async function fetchChampionName(summonerID) {
-    const rankAPI = `https://ddragon.leagueoflegends.com/cdn/12.9.1/data/en_US/champion.json`;
-    const rankResponse = await fetch(rankAPI);
-    let rankData = await rankResponse.json();
-    let championList = rankData.data;
+async function fetchChampionName(championID) {
+    const champAPI = `https://ddragon.leagueoflegends.com/cdn/12.9.1/data/en_US/champion.json`;
+    const champResponse = await fetch(champAPI);
+    let champData = await champResponse.json();
+    let championList = champData.data;
     for (var i in championList) {
-        if (championList[i].key == summonerID) {
+        if (championList[i].key == championID) {
             return championList[i].name;
         }
     }
-
-};
+}
 
 
 bot.on('messageCreate', async (msg) => {
@@ -207,7 +222,8 @@ bot.on('messageCreate', async (msg) => {
         let soloqWins = await fetchRank(playerSummonerID, "solo", "wins");
         let soloqLosses = await fetchRank(playerSummonerID, "solo", "losses");
         let soloqWinRatio = await fetchRank(playerSummonerID, "solo", "winRatio");
-        soloqWinRatio = soloqWinRatio.toFixed(4) * 100;
+        if (soloqTier != "Unranked")
+            soloqWinRatio = soloqWinRatio.toFixed(4) * 100;
         let soloqIcon = await fetchRankIcon(soloqTier);
 
         let flexqTier = await fetchRank(playerSummonerID, "flex", "tier");
@@ -217,11 +233,8 @@ bot.on('messageCreate', async (msg) => {
         let flexqWins = await fetchRank(playerSummonerID, "flex", "wins");
         let flexqLosses = await fetchRank(playerSummonerID, "flex", "losses");
         let flexqWinRatio = await fetchRank(playerSummonerID, "flex", "winRatio");
-        if (flexqTier != "Unranked") {
+        if (flexqTier != "Unranked")
             flexqWinRatio = flexqWinRatio.toFixed(4) * 100;
-        }
-
-
 
         let num1Champ = await fetchMasteryChamps(playerSummonerID, 0, "championId");
         let num1ChampLevel = await fetchMasteryChamps(playerSummonerID, 0, "championLevel");
@@ -238,9 +251,6 @@ bot.on('messageCreate', async (msg) => {
         let mastery1Champ = await fetchChampionName(num1Champ);
         let mastery2Champ = await fetchChampionName(num2Champ);
         let mastery3Champ = await fetchChampionName(num3Champ);
-
-
-
 
         // If is unranked in either queue, set the value to "Unranked."
         if (flexqTier === "Unranked") {
