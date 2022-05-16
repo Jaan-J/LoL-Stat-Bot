@@ -3,10 +3,8 @@ const { Client, Intents, MessageEmbed } = require('discord.js');
 const bot = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const PREFIX = '!lolsb'; // Set the prefix
 
-
 require("dotenv").config(); // used to hide API key
 bot.login(process.env.BOTTOKEN);
-
 
 bot.on('ready', readyDiscord);
 function readyDiscord() {
@@ -19,25 +17,30 @@ async function fetchSummoner(name, ch) {
     const summonerInfoAPI = `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}?api_key=${process.env.RIOTKEY}`;
     const playerResponse = await fetch(summonerInfoAPI);
     let playerData = await playerResponse.json();
+    if (playerResponse.status === 200) {
+        switch
+        (ch) {
+            case "profileIconId":
+                return playerData.profileIconId;
+            case "summonerLevel":
+                return playerData.summonerLevel;
+            case "summonerID":
+                return playerData.id;
+            default:
+                return "Error";
 
-    switch
-    (ch) {
-        case "profileIconId":
-            return playerData.profileIconId;
-        case "summonerLevel":
-            return playerData.summonerLevel;
-        case "summonerID":
-            return playerData.id;
-        default:
-            return "Error";
+        }
+    } else {
+        console.log("Error: No valid entry.");
+        return null;
     }
+
 }
 
 // Fetches the mastery level of a player
 async function fetchMastery(summonerID) {
     const masteryAPI = `https://na1.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerID}?api_key=${process.env.RIOTKEY}`;
     const masteryResponse = await fetch(masteryAPI);
-
     let masteryData = await masteryResponse.json();
     return masteryData;
 }
@@ -49,9 +52,8 @@ async function fetchMasteryChamps(summonerID, mostPlayed, returnData) {
     let masteryData = await masteryResponse.json();
 
     if (mostPlayed === 0) {
-        if (!masteryData[0].championId) {
+        if (!masteryData[0].championId)
             return null;
-        }
         switch
         (returnData) {
             case "championId":
@@ -65,9 +67,8 @@ async function fetchMasteryChamps(summonerID, mostPlayed, returnData) {
                 return null;
         }
     } else if (mostPlayed === 1) {
-        if (!masteryData[1].championId) {
+        if (!masteryData[1].championId)
             return null;
-        }
         switch
         (returnData) {
             case "championId":
@@ -81,9 +82,8 @@ async function fetchMasteryChamps(summonerID, mostPlayed, returnData) {
                 return null;
         }
     } else if (mostPlayed === 2) {
-        if (!masteryData[2].championId) {
+        if (!masteryData[2].championId)
             return null;
-        }
         switch
         (returnData) {
             case "championId":
@@ -198,7 +198,6 @@ async function fetchChampionName(championID) {
 bot.on('messageCreate', async (msg) => {
     const content = msg.content;
     console.log(msg.content);
-
     // Ignore any message that doesn't start with the correct prefix.
     if (!content.startsWith(PREFIX)) {
         return;
@@ -209,12 +208,19 @@ bot.on('messageCreate', async (msg) => {
         let buffer = content.replace(PREFIX, "");
         playerName = buffer.trim();
 
-        let playerProfileIconId = await fetchSummoner(playerName, "profileIconId");
+        //Fetch account information of player
         let playerSummonerID = await fetchSummoner(playerName, "summonerID");
 
+        if (playerSummonerID === null) {
+            msg.reply("Player not found.");
+            return null;
+        }
+
+        let playerProfileIconId = await fetchSummoner(playerName, "profileIconId");
         let playerSummonerLevel = await fetchSummoner(playerName, "summonerLevel");
         let playerMasteryLevel = await fetchMastery(playerSummonerID);
 
+        // Fetch soloq rank information
         let soloqTier = await fetchRank(playerSummonerID, "solo", "tier");
         soloqTier = soloqTier.charAt(0) + soloqTier.slice(1).toLowerCase();
         let soloqRank = await fetchRank(playerSummonerID, "solo", "rank");
@@ -226,6 +232,7 @@ bot.on('messageCreate', async (msg) => {
             soloqWinRatio = soloqWinRatio.toFixed(4) * 100;
         let soloqIcon = await fetchRankIcon(soloqTier);
 
+        //Fetch flexq rank information
         let flexqTier = await fetchRank(playerSummonerID, "flex", "tier");
         flexqTier = flexqTier.charAt(0) + flexqTier.slice(1).toLowerCase();
         let flexqRank = await fetchRank(playerSummonerID, "flex", "rank");
@@ -236,6 +243,8 @@ bot.on('messageCreate', async (msg) => {
         if (flexqTier != "Unranked")
             flexqWinRatio = flexqWinRatio.toFixed(4) * 100;
 
+
+        //Fetch champion mastery info: Name, Level, Points
         let num1Champ = await fetchMasteryChamps(playerSummonerID, 0, "championId");
         let num1ChampLevel = await fetchMasteryChamps(playerSummonerID, 0, "championLevel");
         let num1ChampPoints = await fetchMasteryChamps(playerSummonerID, 0, "championPoints");
